@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Text, StyleSheet, View, Dimensions, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Dimensions, Alert } from "react-native";
 import GestureRecognizer, {
   swipeDirections,
 } from "react-native-swipe-gestures";
@@ -13,18 +13,20 @@ import {
   moveDown,
   isGameOver,
 } from "./board";
+import { phi } from "mathjs";
 
-const width = Dimensions.get("window").width - 40;
+const width = Dimensions.get("window").width - 21 - 21;
 
-function Game() {
-  const [board, setBoard] = useState(newTile(emptyBoard));
+function Game({ setScore, score }) {
+  const [board, setBoard] = useState(newTile(emptyBoard()));
+
+  useEffect(() => {
+    setScore(board.score);
+  }, [board]);
 
   function checkGameOver() {
     if (isGameOver(board)) {
-      //handle game over here. alert? more complicated? how do alerts even look on mobile lol
-      //   alert("game over!");
-      // here there can be a prompt to log a name to save a score if in the top 10 ("inappropriate names and their scores may be removed")
-      Alert.alert("Game over", `Your score was ${"1000"}. Great job!`, [
+      Alert.alert("Game over", `Your score was ${score}. Great job!`, [
         {
           text: "New game",
           onPress: () => console.log("new game started"),
@@ -44,7 +46,7 @@ function Game() {
 
   function left() {
     setBoard(newTile(moveLeft(board)));
-    checkGameOver();
+    checkGameOver(); //refactor by putting this into the useEffect and then the prev line in-line in 67
   }
   function right() {
     setBoard(newTile(moveRight(board)));
@@ -67,11 +69,9 @@ function Game() {
       onSwipeUp={up}
       onSwipeDown={down}
     >
-      <Text style={styles.header}>Fib Tiles !</Text>
-      <Text style={styles.header}>Let's get fibbin</Text>
       <View style={styles.board}>
-        {board.map((row, i) => (
-          <View key={`row-${i}`} style={styles.row}>
+        {board.board.map((row, i) => (
+          <View key={`row-${i}`} style={[styles.row]}>
             {row.map((number, j) => (
               <GameCell key={`col-${j}`} number={number} />
             ))}
@@ -83,22 +83,19 @@ function Game() {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    padding: 40,
-    fontSize: 50,
-    textAlign: "center",
-    color: "olive",
-    fontWeight: "bold",
-  },
   board: {
     width: width,
     padding: 5,
-    margin: 20,
-    backgroundColor: "olive",
+    margin: 21,
+    backgroundColor: "black",
+    borderRadius: 8,
   },
   row: {
     flexDirection: "row",
     height: width / 5,
+  },
+  goldenRow: {
+    height: width / phi / 5,
   },
 });
 

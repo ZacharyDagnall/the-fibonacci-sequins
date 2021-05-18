@@ -6,19 +6,22 @@ const fibonacciSequence = [
 
 // i need a way to keep score too, which can be updated in merge
 export function emptyBoard() {
-  return [
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-  ];
+  return {
+    board: [
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+    ],
+    score: 0,
+  };
 }
 
-function isFull(board) {
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length; j++) {
-      if (board[i][j] === 0) {
+function isFull(boardObj) {
+  for (let i = 0; i < boardObj.board.length; i++) {
+    for (let j = 0; j < boardObj.board[i].length; j++) {
+      if (boardObj.board[i][j] === 0) {
         return false;
       }
     }
@@ -32,23 +35,22 @@ function randomCoordinate() {
   return [row, col];
 }
 
-export function newTile(board) {
-  if (isFull(board)) {
-    return board;
+export function newTile(boardObj) {
+  if (isFull(boardObj)) {
+    return boardObj;
   }
 
   let [row, col] = randomCoordinate();
-  while (board[row][col] !== 0) {
+  while (boardObj.board[row][col] !== 0) {
     [row, col] = randomCoordinate();
   }
 
-  board[row][col] = newNums[Math.floor(Math.random() * newNums.length)];
-  return board;
+  boardObj.board[row][col] =
+    newNums[Math.floor(Math.random() * newNums.length)];
+  return boardObj;
 }
 
 function canCombine(a, b) {
-  //   let a = parseInt(tile1.textContent); //not sure if these need to be parsed this time ?
-  //   let b = parseInt(tile2.textContent); //not sure if these need to be parsed this time ?
   let m = fibonacciSequence.indexOf(a);
   let n = fibonacciSequence.indexOf(b);
 
@@ -56,102 +58,108 @@ function canCombine(a, b) {
 }
 
 //slides all tiles to the left
-function slideLeft(board) {
-  const newBoard = emptyBoard();
-  for (let i = 0; i < board.length; i++) {
+function slideLeft(boardObj) {
+  const newBoardObj = emptyBoard();
+  newBoardObj.score = boardObj.score;
+  for (let i = 0; i < boardObj.board.length; i++) {
     let newJ = 0;
-    for (let j = 0; j < board[i].length; j++) {
-      if (board[i][j] !== 0) {
-        newBoard[i][newJ] = board[i][j];
+    for (let j = 0; j < boardObj.board[i].length; j++) {
+      if (boardObj.board[i][j] !== 0) {
+        newBoardObj.board[i][newJ] = boardObj.board[i][j];
         newJ++;
       }
     }
   }
-  return newBoard;
+  return newBoardObj;
 }
 // // // slide left and smush left probably need delays in order to animate? not sure...
 //combines any tiles that can be combined
-function smushLeft(board) {
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length - 1; j++) {
-      if (canCombine(board[i][j], board[i][j + 1])) {
-        let newVal = board[i][j] + board[i][j + 1];
-        board[i][j] = newVal;
+function smushLeft(boardObj) {
+  for (let i = 0; i < boardObj.board.length; i++) {
+    for (let j = 0; j < boardObj.board[i].length - 1; j++) {
+      if (canCombine(boardObj.board[i][j], boardObj.board[i][j + 1])) {
+        let newVal = boardObj.board[i][j] + boardObj.board[i][j + 1];
+        boardObj.board[i][j] = newVal;
         // ~~~ upcate score here ~~~
-        // // score += newVal
-        board[i][j + 1] = 0;
+        boardObj.score += newVal;
+        boardObj.board[i][j + 1] = 0;
       }
     }
   }
 
-  return board;
+  return boardObj;
 }
 
-export function moveLeft(board) {
-  return slideLeft(smushLeft(slideLeft(board)));
+export function moveLeft(boardObj) {
+  return slideLeft(smushLeft(slideLeft(boardObj)));
 }
 
 //using these functions to recycle moveLeft will probably prevent us from doing animations... NG. Return to fix
-export function moveRight(board) {
-  return flip(moveLeft(flip(board)));
+export function moveRight(boardObj) {
+  return flip(moveLeft(flip(boardObj)));
 }
-export function moveUp(board) {
-  return turnCW(moveLeft(turnCCW(board)));
+export function moveUp(boardObj) {
+  return turnCW(moveLeft(turnCCW(boardObj)));
 }
-export function moveDown(board) {
-  return turnCCW(moveLeft(turnCW(board)));
+export function moveDown(boardObj) {
+  return turnCCW(moveLeft(turnCW(boardObj)));
 }
 
-function flip(board) {
-  const flippedBoard = emptyBoard();
+function flip(boardObj) {
+  const flippedBoardObj = emptyBoard();
+  flippedBoardObj.score = boardObj.score;
 
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length; j++) {
-      flippedBoard[i][j] = board[i][board[i].length - 1 - j];
+  for (let i = 0; i < boardObj.board.length; i++) {
+    for (let j = 0; j < boardObj.board[i].length; j++) {
+      flippedBoardObj.board[i][j] =
+        boardObj.board[i][boardObj.board[i].length - 1 - j];
     }
   }
 
-  return flippedBoard;
+  return flippedBoardObj;
 }
 
 //turns the board Clock-Wise
-function turnCW(board) {
-  const cwBoard = emptyBoard();
+function turnCW(boardObj) {
+  const cwBoardObj = emptyBoard();
+  cwBoardObj.score = boardObj.score;
 
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length; j++) {
-      cwBoard[i][j] = board[board.length - 1 - j][i];
+  for (let i = 0; i < boardObj.board.length; i++) {
+    for (let j = 0; j < boardObj.board[i].length; j++) {
+      cwBoardObj.board[i][j] = boardObj.board[boardObj.board.length - 1 - j][i];
     }
   }
 
-  return cwBoard;
+  return cwBoardObj;
 }
 
 //turns the board Counter Clock-Wise
-function turnCCW(board) {
-  const ccwBoard = emptyBoard();
+function turnCCW(boardObj) {
+  const ccwBoardObj = emptyBoard();
+  ccwBoardObj.score = boardObj.score;
 
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length; j++) {
-      ccwBoard[i][j] = board[j][board[i].length - 1 - i];
+  for (let i = 0; i < boardObj.board.length; i++) {
+    for (let j = 0; j < boardObj.board[i].length; j++) {
+      ccwBoardObj.board[i][j] =
+        boardObj.board[j][boardObj.board[i].length - 1 - i];
     }
   }
 
-  return ccwBoard;
+  return ccwBoardObj;
 }
 
-export function isGameOver(board) {
-  if (!isFull(board)) {
+export function isGameOver(boardObj) {
+  if (!isFull(boardObj)) {
     return false;
   }
   // next check for any two adjacent combinables
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length; j++) {
+  for (let i = 0; i < boardObj.board.length; i++) {
+    for (let j = 0; j < boardObj.board[i].length; j++) {
       /* (i-j)%2 ===0 verifies that the row and col indices are the 
         same parity (i.e. both even or both odd), which is only here to 
         reduce duplicate checking. We don't need to check the same thing 
         twice, so we only check on tiles like (0,0), (0,4), (1,3), etc. */
-      if ((i - j) % 2 === 0 && hasSmushyNeighbor(i, j, board)) {
+      if ((i - j) % 2 === 0 && hasSmushyNeighbor(i, j, boardObj.board)) {
         return false;
       }
     }
@@ -159,6 +167,7 @@ export function isGameOver(board) {
   return true;
 }
 
+//the board param here is just a matrix, not a Board Object
 function hasSmushyNeighbor(row, col, board) {
   //check left neighbor
   if (col - 1 >= 0 && canCombine(board[row][col], board[row][col - 1])) {

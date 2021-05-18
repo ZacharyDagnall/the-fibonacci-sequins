@@ -1,12 +1,15 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Game from "./Game";
+import HeaderComponent from "./HeaderComponent";
 
 export default function App() {
+  const [score, setScore] = useState(0);
   return (
     <View style={styles.container}>
-      <Game />
+      <HeaderComponent score={score} />
+      <Game setScore={setScore} score={score} />
     </View>
   );
 }
@@ -14,7 +17,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#B9D9EB",
     alignItems: "center",
     justifyContent: "center",
   },
