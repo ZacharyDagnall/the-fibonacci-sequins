@@ -47,11 +47,6 @@ function Game({ setScore, score }) {
     }
   }
 
-  //   function left() {}
-  //   function right() {}
-  //   function up() {}
-  //   function down() {}
-
   return (
     <GestureRecognizer
       style={styles.screenStyle}
