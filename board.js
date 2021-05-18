@@ -26,7 +26,7 @@ function isFull(board) {
   return true;
 }
 
-function getRandomCoordinate() {
+function randomCoordinate() {
   const row = Math.floor(Math.random() * 5);
   const col = Math.floor(Math.random() * 5);
   return [row, col];
@@ -37,9 +37,9 @@ export function newTile(board) {
     return board;
   }
 
-  let [row, col] = getRandomCoordinate();
+  let [row, col] = randomCoordinate();
   while (board[row][col] !== 0) {
-    [row, col] = getRandomCoordinate();
+    [row, col] = randomCoordinate();
   }
 
   board[row][col] = newNums[Math.floor(Math.random() * newNums.length)];
@@ -87,12 +87,19 @@ function smushLeft(board) {
   return board;
 }
 
-function moveLeft(board) {
+export function moveLeft(board) {
   return slideLeft(smushLeft(slideLeft(board)));
 }
 
-function moveRight(board) {
+//using these functions to recycle moveLeft will probably prevent us from doing animations... NG. Return to fix
+export function moveRight(board) {
   return flip(moveLeft(flip(board)));
+}
+export function moveUp(board) {
+  return turnCW(moveLeft(turnCCW(board)));
+}
+export function moveDown(board) {
+  return turnCCW(moveLeft(turnCW(board)));
 }
 
 function flip(board) {
@@ -107,6 +114,73 @@ function flip(board) {
   return flippedBoard;
 }
 
-function turnCW(board) {}
+//turns the board Clock-Wise
+function turnCW(board) {
+  const cwBoard = emptyBoard();
 
-function turnCCW(board) {}
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      cwBoard[i][j] = board[board.length - 1 - j][i];
+    }
+  }
+
+  return cwBoard;
+}
+
+//turns the board Counter Clock-Wise
+function turnCCW(board) {
+  const ccwBoard = emptyBoard();
+
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      ccwBoard[i][j] = board[j][board[i].length - 1 - i];
+    }
+  }
+
+  return ccwBoard;
+}
+
+export function isGameOver(board) {
+  if (!isFull) {
+    return false;
+  }
+  // next check for any two adjacent combinables
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      /* (i-j)%2 ===0 verifies that the row and col indices are the 
+        same parity (i.e. both even or both odd), which is only here to 
+        reduce duplicate checking. We don't need to check the same thing 
+        twice, so we only check on tiles like (0,0), (0,4), (1,3), etc. */
+      if ((i - j) % 2 === 0 && hasSmushyNeighbor(i, j, board)) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+function hasSmushyNeighbor(row, col, board) {
+  //check left neighbor
+  if (col - 1 >= 0 && canCombine(board[row][col], board[row][col - 1])) {
+    return true;
+  }
+  //check right neighbor
+  if (
+    col + 1 < board[row].length &&
+    canCombine(board[row][col], board[row][col + 1])
+  ) {
+    return true;
+  }
+  //check up neighbor
+  if (row - 1 >= 0 && canCombine(board[row][col], board[row - 1][col])) {
+    return true;
+  }
+  //check down neighbor
+  if (
+    row + 1 < board.length &&
+    canCombine(board[row][col], board[row + 1][col])
+  ) {
+    return true;
+  }
+  return false;
+}
