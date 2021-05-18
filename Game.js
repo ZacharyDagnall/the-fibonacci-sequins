@@ -27,6 +27,8 @@ function Game({ setScore, score }) {
 
   function checkGameOver() {
     if (isGameOver(board)) {
+      // right here we need to check to see if their score qualifies them to be saved, and then save them.
+      // if they are saved, the leaderboard will have to be re-rendered after they save their name
       Alert.alert("Game over", `Your score was ${score}. Great job!`, [
         {
           text: "New Game! (wow this is un poco addicting)",

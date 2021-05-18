@@ -30,6 +30,7 @@ golden rectangle game grid? (if it is playable in landscape-only then it will lo
 
 !! still needs animation !!
 
-conditional font sizes depending on the num of digits of the number ?
-
 how high should the numbers go? i'll also have to have that many different-colored sequin images
+
+oh-- for the leaderboard i could have it so that you only show up if your place is a fibonacci number. 4th place doesn't show up haha. Not sure what to do about the two 1s though...
+Like instead of just indexing the top 8 with fibonacci numbers, i can only take the 1st, 2nd, 3rd, 5th, and 8th places or something. Maybe put first place twice for extra glory. Something like that.

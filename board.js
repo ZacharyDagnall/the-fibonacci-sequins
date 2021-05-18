@@ -1,10 +1,9 @@
 const newNums = [1, 1, 2];
 const fibonacciSequence = [
   1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181,
-  6765,
+  6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811,
 ];
 
-// i need a way to keep score too, which can be updated in merge
 export function emptyBoard() {
   return {
     board: [
@@ -80,7 +79,6 @@ function smushLeft(boardObj) {
       if (canCombine(boardObj.board[i][j], boardObj.board[i][j + 1])) {
         let newVal = boardObj.board[i][j] + boardObj.board[i][j + 1];
         boardObj.board[i][j] = newVal;
-        // ~~~ upcate score here ~~~
         boardObj.score += newVal;
         boardObj.board[i][j + 1] = 0;
       }
@@ -152,7 +150,7 @@ export function isGameOver(boardObj) {
   if (!isFull(boardObj)) {
     return false;
   }
-  // next check for any two adjacent combinables
+  // next, check for any two adjacent combinables
   for (let i = 0; i < boardObj.board.length; i++) {
     for (let j = 0; j < boardObj.board[i].length; j++) {
       /* (i-j)%2 ===0 verifies that the row and col indices are the 
@@ -167,24 +165,24 @@ export function isGameOver(boardObj) {
   return true;
 }
 
-//the board param here is just a matrix, not a Board Object
+//the board param here is **just a matrix**, not a Board Object
 function hasSmushyNeighbor(row, col, board) {
-  //check left neighbor
+  //check left neighbor (if exists)
   if (col - 1 >= 0 && canCombine(board[row][col], board[row][col - 1])) {
     return true;
   }
-  //check right neighbor
+  //check right neighbor (if exists)
   if (
     col + 1 < board[row].length &&
     canCombine(board[row][col], board[row][col + 1])
   ) {
     return true;
   }
-  //check up neighbor
+  //check up neighbor (if exists)
   if (row - 1 >= 0 && canCombine(board[row][col], board[row - 1][col])) {
     return true;
   }
-  //check down neighbor
+  //check down neighbor (if exists)
   if (
     row + 1 < board.length &&
     canCombine(board[row][col], board[row + 1][col])
