@@ -141,7 +141,7 @@ function turnCCW(board) {
 }
 
 export function isGameOver(board) {
-  if (!isFull) {
+  if (!isFull(board)) {
     return false;
   }
   // next check for any two adjacent combinables
