@@ -1,0 +1,12 @@
+{
+  "name": "the-fibonacci-sequins",
+  "displayName": "the-fibonacci-sequins",
+  "expo": {
+    "name": "the-fibonacci-sequins",
+    "slug": "the-fibonacci-sequins",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
