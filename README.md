@@ -20,7 +20,7 @@ sequin images taken from [here](https://www.vecteezy.com/vector-art/123086-color
 note to self: if i publish this, i've gotta make it high-scorable. Nothing gets people going like clout. How could i store that backend though. Heroku can be so slow. Plus then fetches....
 Maybe i can do that as the last thing before publishing.
 
-- will only display top 10 scores and will only save to DB if you make it to the top ten
+- will only display top 3? 5? 8? scores and will only save to DB if you make it to the toppers
 
 link to italian music to play while you play? opens a spotify playlist on your phone.
 

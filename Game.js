@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Dimensions, Alert } from "react-native";
+import { StyleSheet, View, Dimensions, Alert, Linking } from "react-native";
 import GestureRecognizer, {
   swipeDirections,
 } from "react-native-swipe-gestures";
@@ -22,14 +22,15 @@ function Game({ setScore, score }) {
 
   useEffect(() => {
     setScore(board.score);
+    checkGameOver();
   }, [board]);
 
   function checkGameOver() {
     if (isGameOver(board)) {
       Alert.alert("Game over", `Your score was ${score}. Great job!`, [
         {
-          text: "New game",
-          onPress: () => console.log("new game started"),
+          text: "New Game! (wow this is un poco addicting)",
+          onPress: () => setBoard(newTile(emptyBoard())),
         },
         {
           text: "Cancel",
@@ -37,37 +38,27 @@ function Game({ setScore, score }) {
           style: "cancel",
         },
         {
-          text: "rate in app store",
-          onPress: () => console.log("app store pressed"),
+          //   // once published, change to:
+          //   text: "rate in app store ",
+          text: "see dev's website",
+          onPress: () => Linking.openURL("https://zacharydagnall.dev/"),
         },
       ]);
     }
   }
 
-  function left() {
-    setBoard(newTile(moveLeft(board)));
-    checkGameOver(); //refactor by putting this into the useEffect and then the prev line in-line in 67
-  }
-  function right() {
-    setBoard(newTile(moveRight(board)));
-    checkGameOver();
-  }
-  function up() {
-    setBoard(newTile(moveUp(board)));
-    checkGameOver();
-  }
-  function down() {
-    setBoard(newTile(moveDown(board)));
-    checkGameOver();
-  }
+  //   function left() {}
+  //   function right() {}
+  //   function up() {}
+  //   function down() {}
 
   return (
     <GestureRecognizer
       style={styles.screenStyle}
-      onSwipeLeft={left}
-      onSwipeRight={right}
-      onSwipeUp={up}
-      onSwipeDown={down}
+      onSwipeLeft={() => setBoard(newTile(moveLeft(board)))}
+      onSwipeRight={() => setBoard(newTile(moveRight(board)))}
+      onSwipeUp={() => setBoard(newTile(moveUp(board)))}
+      onSwipeDown={() => setBoard(newTile(moveDown(board)))}
     >
       <View style={styles.board}>
         {board.board.map((row, i) => (
