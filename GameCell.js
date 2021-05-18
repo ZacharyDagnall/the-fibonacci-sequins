@@ -28,7 +28,15 @@ function GameCell({ number }) {
           style={styles.backgroundImage}
           source={sequins[number] || ruby}
         >
-          <Text style={styles.textStyle}>{number > 0 ? number : ""}</Text>
+          <Text
+            style={
+              number < 144
+                ? styles.textStyle
+                : [styles.textStyle, styles.tripsDigitText]
+            }
+          >
+            {number > 0 ? number : ""}
+          </Text>
         </ImageBackground>
       ) : (
         <Text style={styles.textStyle}>{number > 0 ? number : ""}</Text>
@@ -94,6 +102,9 @@ const styles = StyleSheet.create({
     textShadowColor: "rgba(0, 0, 0, 1)",
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 5,
+  },
+  tripsDigitText: {
+    fontSize: 21,
   },
 });
 

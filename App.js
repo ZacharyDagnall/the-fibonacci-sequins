@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Game from "./Game";
 import HeaderComponent from "./HeaderComponent";
+import LeaderBoard from "./LeaderBoard";
 
 export default function App() {
   const [score, setScore] = useState(0);
@@ -10,6 +11,7 @@ export default function App() {
     <View style={styles.container}>
       <HeaderComponent score={score} />
       <Game setScore={setScore} score={score} />
+      <LeaderBoard />
     </View>
   );
 }
