@@ -5,8 +5,8 @@ Using in (substantial) part [this blog post](https://medium.com/tinyso/how-to-cr
 
 This app was set up with Expo / React Native
 
-the idea started [here](https://gameboyzarcade.netlify.app/), in a web app by Zak Dagnall and Pat Tuszakowski
+the idea started [here](https://gameboyzarcade.netlify.app/), in a web app by Zak Dagnall and [Pat Tuszakowski] (https://github.com/pat-tusza)
 
-i also used [math.js](https://mathjs.org/docs/getting_started.html)
+i also used [math.js](https://mathjs.org/docs/getting_started.html) for a phi constant
 
 sequin images created by the talented [@m1sterryan](https://twitter.com/M1STERRYAN?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor).
