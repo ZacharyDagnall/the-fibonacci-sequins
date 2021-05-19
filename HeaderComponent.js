@@ -6,7 +6,7 @@ function HeaderComponent({ score }) {
     <View>
       <Text style={styles.header}>The Fibonacci Sequins!</Text>
       {/* <Text style={styles.header}>Let's get fibbin</Text> */}
-      <Text style={styles.score}>Your Current Score: {score}</Text>
+      <Text style={styles.score}>Your Score: {score}</Text>
     </View>
   );
 }

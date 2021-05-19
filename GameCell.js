@@ -1,23 +1,56 @@
 import React from "react";
 import { Text, StyleSheet, View, ImageBackground } from "react-native";
-import ruby from "./ruby.png";
-import lapis from "./lapis.png";
-import lightgreen from "./lightgreen.png";
-import rosequartz from "./rosequartz.png";
-import steelblue from "./steelblue.png";
-import teal from "./teal.png";
-import peridot from "./peridot.png";
-import amethyst from "./amethyst.png";
+import black from "./black.png";
+import blue from "./blue.png";
+import cyan from "./cyan.png";
+import darkBlue from "./darkBlue.png";
+import darkGreen from "./darkGreen.png";
+import darkOrange from "./darkOrange.png";
+import darkPurple from "./darkPurple.png";
+import darkRed from "./darkRed.png";
+import green from "./green.png";
+import lavendar from "./lavendar.png";
+import lightBlue from "./lightBlue.png";
+import lightGray from "./lightGray.png";
+import lightGreen from "./lightGreen.png";
+import lightLimeGreen from "./lightLimeGreen.png";
+import lightOrange from "./lightOrange.png";
+import limeGreen from "./limeGreen.png";
+import magenta from "./magenta.png";
+import orange from "./orange.png";
+import pink from "./pink.png";
+import purple from "./purple.png";
+import red from "./red.png";
+import yellow from "./yellow.png";
 
 const sequins = {
-  1: ruby,
-  2: lapis,
-  3: lightgreen,
-  5: rosequartz,
-  8: steelblue,
-  13: teal,
-  21: peridot,
-  34: amethyst,
+  1: red,
+  2: blue,
+  3: lightGreen,
+  5: lavendar,
+  8: lightOrange,
+  13: darkBlue,
+  21: yellow,
+  34: darkGreen,
+  55: darkRed,
+  89: purple,
+  144: lightBlue,
+  233: lightLimeGreen,
+  377: orange,
+  610: green,
+  987: darkPurple,
+  1597: magenta,
+  2584: cyan,
+  4181: limeGreen,
+  6765: pink,
+  10946: darkOrange,
+  17711: lightGray,
+  28657: red,
+  46368: blue,
+  75025: lightGreen,
+  121393: lavendar,
+  196418: lightOrange,
+  317811: darkBlue,
 };
 
 function GameCell({ number }) {
@@ -26,7 +59,7 @@ function GameCell({ number }) {
       {number > 0 ? (
         <ImageBackground
           style={styles.backgroundImage}
-          source={sequins[number] || ruby}
+          source={sequins[number] || red}
         >
           <Text
             style={
@@ -101,7 +134,7 @@ const styles = StyleSheet.create({
     color: "white",
     textShadowColor: "rgba(0, 0, 0, 1)",
     textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 5,
+    textShadowRadius: 3,
   },
   tripsDigitText: {
     fontSize: 21,
