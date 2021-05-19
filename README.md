@@ -5,7 +5,7 @@ Using in (substantial) part [this blog post](https://medium.com/tinyso/how-to-cr
 
 This app was set up with Expo / React Native
 
-the idea started [here](https://gameboyzarcade.netlify.app/), in a web app by Zak Dagnall and [Pat-Tuszakowski] (https://github.com/pat-tusza)
+the idea started [here](https://gameboyzarcade.netlify.app/), in a web app by Zak Dagnall and [Pat-Tuszakowski](https://github.com/pat-tusza)
 
 i also used [math.js](https://mathjs.org/docs/getting_started.html) for a phi constant
 
