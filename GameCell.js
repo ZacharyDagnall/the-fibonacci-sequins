@@ -24,6 +24,7 @@ import red from "./red.png";
 import yellow from "./yellow.png";
 
 const sequins = {
+  0: black,
   1: red,
   2: blue,
   3: lightGreen,
@@ -94,39 +95,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     opacity: 1,
-  },
-  cell1: {
-    backgroundColor: "orange",
-  },
-  cell2: {
-    backgroundColor: "rgb(39, 207, 207)",
-  },
-  cell3: {
-    backgroundColor: "pink",
-  },
-  cell5: {
-    backgroundColor: "gold",
-  },
-  cell8: {
-    backgroundColor: "greenyellow",
-  },
-  cell13: {
-    backgroundColor: "#e9c46a",
-  },
-  cell21: {
-    backgroundColor: "goldenrod",
-  },
-  cell34: {
-    backgroundColor: "rebeccapurple",
-  },
-  cell55: {
-    backgroundColor: "cyan",
-  },
-  cell89: {
-    backgroundColor: "gold",
-  },
-  cell144: {
-    backgroundColor: "aquamarine",
   },
   textStyle: {
     fontSize: 34,

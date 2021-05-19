@@ -4,9 +4,9 @@ const indices = [1, 1, 2, 3, 5, 8, 13, 21];
 
 function LeaderBoard({ toppers }) {
   toppers = [
+    { name: "Fibonacci Himself", score: 64516 },
     { name: "Bingo", score: 9000 },
     { name: "Bongo", score: 3421 },
-    { name: "Fibonacci Himself", score: 144 },
     { name: "Vizzini", score: 34 },
     { name: "Caesar", score: 21 },
     { name: "Thing 1", score: 13 },
@@ -15,6 +15,7 @@ function LeaderBoard({ toppers }) {
   ];
   return (
     <View>
+      <Text>Leaderboard:</Text>
       {toppers.map((t, i) => {
         return (
           <Text key={i}>

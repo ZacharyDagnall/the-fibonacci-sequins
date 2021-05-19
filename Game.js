@@ -1,54 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Dimensions, Alert, Linking } from "react-native";
+import React from "react";
+import { StyleSheet, View, Dimensions } from "react-native";
 import GestureRecognizer, {
   swipeDirections,
 } from "react-native-swipe-gestures";
 import GameCell from "./GameCell";
-import {
-  emptyBoard,
-  newTile,
-  moveLeft,
-  moveRight,
-  moveUp,
-  moveDown,
-  isGameOver,
-} from "./board";
+import { newTile, moveLeft, moveRight, moveUp, moveDown } from "./board";
 import { phi } from "mathjs";
 
 const width = Dimensions.get("window").width - 21 - 21;
 
-function Game({ setScore, score }) {
-  const [board, setBoard] = useState(newTile(emptyBoard()));
-
-  useEffect(() => {
-    setScore(board.score);
-    checkGameOver();
-  }, [board]);
-
-  function checkGameOver() {
-    if (isGameOver(board)) {
-      // right here we need to check to see if their score qualifies them to be saved, and then save them.
-      // if they are saved, the leaderboard will have to be re-rendered after they save their name
-      Alert.alert("Game over", `Your score was ${score}. Great job!`, [
-        {
-          text: "New Game! (wow this is un poco addicting)",
-          onPress: () => setBoard(newTile(emptyBoard())),
-        },
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          //   // once published, change to:
-          //   text: "rate in app store ",
-          text: "see dev's website",
-          onPress: () => Linking.openURL("https://zacharydagnall.dev/"),
-        },
-      ]);
-    }
-  }
-
+function Game({ board, setBoard }) {
   return (
     <GestureRecognizer
       style={styles.screenStyle}
@@ -77,6 +38,7 @@ const styles = StyleSheet.create({
     margin: 21,
     backgroundColor: "black",
     borderRadius: 8,
+    elevation: 5,
   },
   row: {
     flexDirection: "row",

@@ -1,9 +1,14 @@
+import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
 import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, Pressable } from "react-native";
 
-function HeaderComponent({ score }) {
+function HeaderComponent({ score, newGame }) {
   return (
     <View>
+      <Pressable style={styles.newGameButton} onPress={newGame}>
+        <Text style={styles.newGameText}>New Game!</Text>
+      </Pressable>
+
       <Text style={styles.header}>The Fibonacci Sequins!</Text>
       {/* <Text style={styles.header}>Let's get fibbin</Text> */}
       <Text style={styles.score}>Your Score: {score}</Text>
@@ -23,6 +28,24 @@ const styles = StyleSheet.create({
     fontSize: 21,
     textAlign: "center",
     color: "blue",
+    fontWeight: "bold",
+  },
+  newGameButton: {
+    fontWeight: "bold",
+    borderRadius: 5,
+    backgroundColor: "blue",
+    borderColor: "black",
+    borderWidth: 2,
+    elevation: 3,
+    width: 89,
+    alignSelf: "flex-end",
+    marginTop: 13,
+  },
+  newGameText: {
+    fontSize: 13,
+    textAlign: "center",
+    color: "red",
+    padding: 3,
     fontWeight: "bold",
   },
 });
