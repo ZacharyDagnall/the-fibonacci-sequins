@@ -1,8 +1,23 @@
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, StyleSheet, View, Pressable } from "react-native";
 
 function HeaderComponent({ score, newGame }) {
+  // const api = "http://localhost:3001";
+
+  // useEffect(() => {
+  //   fetch(`${api}/scores`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({ name: "Fibonacci Himself", score: 64516 }),
+  //   })
+  //     .then((r) => r.json())
+  //     .then((data) => console.log("what is coming back from post", data));
+  // }, [score]);
+
   return (
     <View>
       <Pressable style={styles.newGameButton} onPress={newGame}>

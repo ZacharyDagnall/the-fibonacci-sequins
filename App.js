@@ -9,11 +9,17 @@ import { emptyBoard, newTile, isGameOver } from "./board";
 export default function App() {
   const [board, setBoard] = useState(newTile(emptyBoard()));
   const [score, setScore] = useState(0);
+  const api = "http://localhost:3001";
 
   useEffect(() => {
     setScore(board.score);
     checkGameOver();
   }, [board]);
+
+  useEffect(() => {
+    if (score) {
+    }
+  }, [score]);
 
   function newGame() {
     setBoard(newTile(emptyBoard()));
@@ -47,7 +53,7 @@ export default function App() {
     <View style={styles.container}>
       <HeaderComponent score={score} newGame={newGame} />
       <Game setBoard={setBoard} board={board} />
-      <LeaderBoard />
+      <LeaderBoard api={api} />
     </View>
   );
 }

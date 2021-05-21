@@ -1,28 +1,32 @@
-import React from "react";
-import { Text, StyleSheet, View, FlatList } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Text, StyleSheet, View } from "react-native";
 const indices = [1, 1, 2, 3, 5, 8, 13, 21];
 
-function LeaderBoard({ toppers }) {
-  toppers = [
-    { name: "Fibonacci Himself", score: 64516 },
-    { name: "Bingo", score: 9000 },
-    { name: "Bongo", score: 3421 },
-    { name: "Vizzini", score: 34 },
-    { name: "Caesar", score: 21 },
-    { name: "Thing 1", score: 13 },
-    { name: "Thing 2", score: 8 },
-    { name: "Robin Sparkles", score: 5 },
-  ];
+function LeaderBoard({ api }) {
+  const [leaders, setLeaders] = useState([]);
+
+  useEffect(() => {
+    fetch(`${api}/scores/leaderboard`)
+      .then((r) => r.json())
+      .then((data) => {
+        console.log("leader data", data);
+        setLeaders(data);
+      });
+  }, []);
+
   return (
     <View>
       <Text>Leaderboard:</Text>
-      {toppers.map((t, i) => {
+      {leaders.map((t, i) => {
         return (
           <Text key={i}>
-            {indices[i]}. {t.name}: {t.score}
+            {t.rank}. {t.name}: {t.score}
           </Text>
         );
       })}
+      <View className="App">
+        <Text>~~~</Text>
+      </View>
     </View>
   );
 }
