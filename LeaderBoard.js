@@ -15,7 +15,7 @@ function LeaderBoard({ api, isTitleScreen }) {
   }, [isTitleScreen]);
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.header}>Leaderboard:</Text>
       {leaders.map((t, i) => {
         return (
@@ -29,6 +29,13 @@ function LeaderBoard({ api, isTitleScreen }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    borderColor: "red",
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 8,
+  },
   header: {
     fontSize: 21,
     fontFamily: "Copperplate",

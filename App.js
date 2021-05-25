@@ -23,6 +23,7 @@ export default function App() {
   const [name, setName] = useState("");
   const [quitModalVisible, setQuitModalVisible] = useState(false);
   const [gameOverModalVisible, setGameOverModalVisible] = useState(false);
+  const [isNameSubmitted, setIsNameSubmitted] = useState(false);
   const api = "http://192.168.1.18:3001";
 
   useEffect(() => {
@@ -42,7 +43,6 @@ export default function App() {
   }, [isTitleScreen]);
 
   function submitName() {
-    setQuitModalVisible(false);
     fetch(`${api}/scores`, {
       method: "POST",
       headers: {
@@ -50,11 +50,12 @@ export default function App() {
         Accept: "applications/json",
       },
       body: JSON.stringify({ name: name, score: score }),
-    }).then(() => setIsTitleScreen(true));
+    }).then(() => setIsNameSubmitted(true));
   }
 
   function newGame() {
     setBoard(newTile(emptyBoard()));
+    setScore(0);
   }
 
   function quitGame() {
@@ -67,63 +68,32 @@ export default function App() {
 
   useEffect(() => {
     setBoard(newTile(emptyBoard()));
+    setScore(0);
   }, [isTitleScreen]);
 
   function scoreQualifies() {
+    // return true;
+    return score > 1;
     return score > stb.score;
   }
 
   function checkGameOver() {
     // if (isGameOver(board)) {
-    if (score > 10) {
+    if (score > 1) {
+      // if (true) {
       setGameOverModalVisible(true);
-      // // right here we need to check to see if their score qualifies them to be saved, and then save them.
-      // if (scoreQualifies()) {
-      //   // think this might have to be a modal instead of an Alert, in order to grab name input
-      //   //
-      //   // Alert.alert(
-      //   //   "Game Over",
-      //   //   `You scored high enough to join the leaderboard! Enter your name to save your score.`,
-      //   //   [
-      //   //     {
-      //   //       // enter name to be saved.
-      //   //       //onPress: submitName
-      //   //     },
-      //   //     {},
-      //   //   ]
-      //   // );
-      // }
-      // // if they are saved, the leaderboard will have to be re-rendered after they save their name
-      // else {
-      //   Alert.alert(
-      //     "Game over",
-      //     `Your score was ${score}. Next time try to make the leaderboard!`,
-      //     [
-      //       {
-      //         text: "New Game! (wow this is un poco addicting)",
-      //         onPress: newGame,
-      //       },
-      //       {
-      //         text: "Cancel",
-      //         onPress: () => console.log("Cancel Pressed"),
-      //         style: "cancel",
-      //       },
-      //       {
-      //         //   // once published, change to:
-      //         //   text: "rate in app store ",
-      //         text: "see dev's website",
-      //         onPress: () => Linking.openURL("https://zacharydagnall.dev/"),
-      //       },
-      //     ]
-      //   );
-      // }
     }
   }
+
+  // function doNothing() {}
 
   return (
     <View style={styles.container}>
       {isTitleScreen && !quitModalVisible ? (
-        <TitleScreen setIsTitleScreen={setIsTitleScreen} />
+        <TitleScreen
+          setIsTitleScreen={setIsTitleScreen}
+          setIsNameSubmitted={setIsNameSubmitted}
+        />
       ) : (
         <>
           <HeaderComponent
@@ -157,8 +127,12 @@ export default function App() {
               placeholder="enter name"
             />
             <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={submitName}
+              style={styles.button}
+              onPress={() => {
+                submitName();
+                setQuitModalVisible(false);
+                setIsTitleScreen(true);
+              }}
             >
               <Text style={styles.textStyle}>Submit</Text>
             </Pressable>
@@ -171,14 +145,14 @@ export default function App() {
         transparent={true}
         visible={gameOverModalVisible}
         onRequestClose={() => {
-          setGameOverModalVisible(!gameOverModalVisible);
+          setGameOverModalVisible(false);
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={[styles.modalText, styles.gameOver]}>Game over!</Text>
-            {scoreQualifies() ? (
-              <>
+            <Text style={[styles.modalText, styles.gameOver]}>Game Over!</Text>
+            {scoreQualifies() && !isNameSubmitted ? (
+              <View style={styles.nameContainer}>
                 <Text style={styles.modalText}>
                   Great job! You scored high enough to join the leaderboard!
                   Enter your name to save your score.
@@ -189,14 +163,36 @@ export default function App() {
                   value={name}
                   placeholder="enter name"
                 />
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={submitName}
-                >
+                <Pressable style={styles.button} onPress={submitName}>
                   <Text style={styles.textStyle}>Submit</Text>
                 </Pressable>
-              </>
+              </View>
             ) : null}
+            <Pressable
+              style={[styles.button, styles.gameOverButton]}
+              onPress={() => {
+                newGame();
+                setGameOverModalVisible(false);
+                setIsNameSubmitted(false);
+              }}
+            >
+              <Text style={styles.textStyle}>New Game</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.gameOverButton]}
+              onPress={() => {
+                setIsTitleScreen(true);
+                setGameOverModalVisible(false);
+              }}
+            >
+              <Text style={styles.textStyle}>Quit</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.gameOverButton]}
+              onPress={() => Linking.openURL("https://zacharydagnall.dev/")}
+            >
+              <Text style={styles.textStyle}>Rate in App Store</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -210,6 +206,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#B9D9EB",
     alignItems: "center",
     justifyContent: "center",
+  },
+  nameContainer: {
+    borderWidth: 1,
+    borderColor: "blue",
+    borderRadius: 5,
+    padding: 3,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "lightblue",
   },
   centeredView: {
     flex: 1,
@@ -234,14 +239,14 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 21,
-    padding: 8,
+    padding: 5,
     elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
     backgroundColor: "#2196F3",
+  },
+  gameOverButton: {
+    margin: 5,
+    width: 233,
+    borderRadius: 8,
   },
   textStyle: {
     color: "white",
@@ -252,6 +257,8 @@ const styles = StyleSheet.create({
     marginBottom: 13,
     textAlign: "center",
     fontSize: 13,
+    fontWeight: "bold",
+    fontFamily: "Copperplate",
   },
   gameOver: {
     fontSize: 21,
@@ -264,5 +271,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     textAlign: "center",
     fontSize: 21,
+    backgroundColor: "lightgrey",
   },
 });

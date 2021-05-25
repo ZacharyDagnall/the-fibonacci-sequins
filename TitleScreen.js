@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View, Pressable } from "react-native";
 
-const TitleScreen = ({ setIsTitleScreen }) => {
+const TitleScreen = ({ setIsTitleScreen, setIsNameSubmitted }) => {
   return (
     <View>
       <View style={styles.marginBottom}>
@@ -9,7 +9,13 @@ const TitleScreen = ({ setIsTitleScreen }) => {
         <Text style={styles.header}>Fibonacci</Text>
         <Text style={styles.header}>Sequins!</Text>
       </View>
-      <Pressable style={styles.button} onPress={() => setIsTitleScreen(false)}>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          setIsTitleScreen(false);
+          setIsNameSubmitted(false);
+        }}
+      >
         <Text style={styles.buttonText}>Play Game!</Text>
       </Pressable>
     </View>
