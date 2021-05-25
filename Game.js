@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   board: {
     width: width,
     padding: 5,
-    margin: 21,
+    margin: 13,
     backgroundColor: "black",
     borderRadius: 8,
     elevation: 5,

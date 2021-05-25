@@ -28,9 +28,7 @@ function HeaderComponent({ score, newGame, quitGame }) {
           <Text style={styles.newGameText}>New Game!</Text>
         </Pressable>
       </View>
-
       <Text style={styles.header}>The Fibonacci Sequins!</Text>
-
       <Text style={styles.score}>Your Score: {score}</Text>
     </View>
   );
@@ -38,17 +36,19 @@ function HeaderComponent({ score, newGame, quitGame }) {
 
 const styles = StyleSheet.create({
   header: {
-    padding: 8,
+    padding: 5,
     fontSize: 34,
     textAlign: "center",
     color: "black",
     fontWeight: "bold",
+    fontFamily: "Times New Roman",
   },
   score: {
     fontSize: 21,
     textAlign: "center",
     color: "blue",
     fontWeight: "bold",
+    fontFamily: "Times New Roman",
   },
   newGameButton: {
     fontWeight: "bold",
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     width: 89,
     marginTop: 13,
+    marginRight: 13,
   },
   newGameText: {
     fontSize: 13,
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     width: 89,
     marginTop: 13,
+    marginLeft: 13,
   },
   quitGameText: {
     fontSize: 13,
@@ -85,6 +87,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonsContainer: {
+    marginTop: 13,
     flexDirection: "row",
     justifyContent: "space-between",
   },

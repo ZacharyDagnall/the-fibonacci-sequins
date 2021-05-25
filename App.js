@@ -22,6 +22,7 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [name, setName] = useState("");
   const [quitModalVisible, setQuitModalVisible] = useState(false);
+  const [gameOverModalVisible, setGameOverModalVisible] = useState(false);
   const api = "http://192.168.1.18:3001";
 
   useEffect(() => {
@@ -29,7 +30,6 @@ export default function App() {
     checkGameOver();
   }, [board]);
 
-  //maybe i can make this a dynamic url with : param in it, and fetch the *next* score to beat. Refetch if they pass
   const [stb, setSTB] = useState({ rank: 0, name: "", score: 0 });
   useEffect(() => {
     fetch(`${api}/scores/scoreToBeat`)
@@ -37,10 +37,10 @@ export default function App() {
       .then((data) => {
         console.log("score to beat", data);
         setSTB(data);
-      });
-  }, []);
+      })
+      .catch((er) => console.log("STB error: ", er.message));
+  }, [isTitleScreen]);
 
-  //i think i only want to do this when they quit or lose. Otherwise 1000 fetches
   function submitName() {
     setQuitModalVisible(false);
     fetch(`${api}/scores`, {
@@ -74,47 +74,49 @@ export default function App() {
   }
 
   function checkGameOver() {
-    if (isGameOver(board)) {
-      // right here we need to check to see if their score qualifies them to be saved, and then save them.
-      if (scoreQualifies()) {
-        // think this might have to be a modal instead, in order to grab name input
-        //
-        // Alert.alert(
-        //   "Game Over",
-        //   `You scored high enough to join the leaderboard! Enter your name to save your score.`,
-        //   [
-        //     {
-        //       // enter name to be saved.
-        //       //onPress: submitName
-        //     },
-        //     {},
-        //   ]
-        // );
-      }
-      // if they are saved, the leaderboard will have to be re-rendered after they save their name
-      else {
-        Alert.alert(
-          "Game over",
-          `Your score was ${score}. Next time try to make the leaderboard!`,
-          [
-            {
-              text: "New Game! (wow this is un poco addicting)",
-              onPress: newGame,
-            },
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            {
-              //   // once published, change to:
-              //   text: "rate in app store ",
-              text: "see dev's website",
-              onPress: () => Linking.openURL("https://zacharydagnall.dev/"),
-            },
-          ]
-        );
-      }
+    // if (isGameOver(board)) {
+    if (score > 10) {
+      setGameOverModalVisible(true);
+      // // right here we need to check to see if their score qualifies them to be saved, and then save them.
+      // if (scoreQualifies()) {
+      //   // think this might have to be a modal instead of an Alert, in order to grab name input
+      //   //
+      //   // Alert.alert(
+      //   //   "Game Over",
+      //   //   `You scored high enough to join the leaderboard! Enter your name to save your score.`,
+      //   //   [
+      //   //     {
+      //   //       // enter name to be saved.
+      //   //       //onPress: submitName
+      //   //     },
+      //   //     {},
+      //   //   ]
+      //   // );
+      // }
+      // // if they are saved, the leaderboard will have to be re-rendered after they save their name
+      // else {
+      //   Alert.alert(
+      //     "Game over",
+      //     `Your score was ${score}. Next time try to make the leaderboard!`,
+      //     [
+      //       {
+      //         text: "New Game! (wow this is un poco addicting)",
+      //         onPress: newGame,
+      //       },
+      //       {
+      //         text: "Cancel",
+      //         onPress: () => console.log("Cancel Pressed"),
+      //         style: "cancel",
+      //       },
+      //       {
+      //         //   // once published, change to:
+      //         //   text: "rate in app store ",
+      //         text: "see dev's website",
+      //         onPress: () => Linking.openURL("https://zacharydagnall.dev/"),
+      //       },
+      //     ]
+      //   );
+      // }
     }
   }
 
@@ -129,11 +131,11 @@ export default function App() {
             newGame={newGame}
             quitGame={quitGame}
           />
-
           <Game setBoard={setBoard} board={board} />
-          <LeaderBoard api={api} stb={stb} />
+          <LeaderBoard api={api} isTitleScreen={isTitleScreen} />
         </>
       )}
+      {/* Quit Game Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -144,7 +146,7 @@ export default function App() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text>
+            <Text style={styles.modalText}>
               You scored high enough to join the leaderboard! Enter your name to
               save your score.
             </Text>
@@ -163,6 +165,41 @@ export default function App() {
           </View>
         </View>
       </Modal>
+      {/* Game Over Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={gameOverModalVisible}
+        onRequestClose={() => {
+          setGameOverModalVisible(!gameOverModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={[styles.modalText, styles.gameOver]}>Game over!</Text>
+            {scoreQualifies() ? (
+              <>
+                <Text style={styles.modalText}>
+                  Great job! You scored high enough to join the leaderboard!
+                  Enter your name to save your score.
+                </Text>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={setName}
+                  value={name}
+                  placeholder="enter name"
+                />
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={submitName}
+                >
+                  <Text style={styles.textStyle}>Submit</Text>
+                </Pressable>
+              </>
+            ) : null}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -178,26 +215,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 13,
   },
   modalView: {
-    margin: 20,
+    margin: 21,
     backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
+    borderRadius: 21,
+    padding: 21,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
-      width: 0,
+      width: 1,
       height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowRadius: 5,
     elevation: 5,
   },
   button: {
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: 21,
+    padding: 8,
     elevation: 2,
   },
   buttonOpen: {
@@ -212,12 +249,20 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalText: {
-    marginBottom: 15,
+    marginBottom: 13,
     textAlign: "center",
+    fontSize: 13,
+  },
+  gameOver: {
+    fontSize: 21,
   },
   input: {
-    height: 40,
-    margin: 12,
+    height: 55,
+    width: 233,
+    margin: 13,
     borderWidth: 1,
+    borderRadius: 5,
+    textAlign: "center",
+    fontSize: 21,
   },
 });
