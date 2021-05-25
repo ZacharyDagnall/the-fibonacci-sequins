@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, View } from "react-native";
 const indices = [1, 1, 2, 3, 5, 8, 13, 21];
 
-function LeaderBoard({ api }) {
+function LeaderBoard({ api, stb }) {
   const [leaders, setLeaders] = useState([]);
-
   useEffect(() => {
     fetch(`${api}/scores/leaderboard`)
       .then((r) => r.json())
       .then((data) => {
         console.log("leader data", data);
         setLeaders(data);
-      });
+      })
+      .catch((er) => setLeaders([er.message]));
   }, []);
 
   return (
@@ -24,9 +24,10 @@ function LeaderBoard({ api }) {
           </Text>
         );
       })}
-      <View className="App">
-        <Text>~~~</Text>
-      </View>
+      <Text>
+        You have to score at least {stb.score} to beat {stb.name} and join the
+        leaderboard.
+      </Text>
     </View>
   );
 }

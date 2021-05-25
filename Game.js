@@ -5,7 +5,7 @@ import GestureRecognizer, {
 } from "react-native-swipe-gestures";
 import GameCell from "./GameCell";
 import { newTile, moveLeft, moveRight, moveUp, moveDown } from "./board";
-import { phi } from "mathjs";
+import { PHI } from "./additionalMath";
 
 const width = Dimensions.get("window").width - 21 - 21;
 
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     height: width / 5,
   },
   goldenRow: {
-    height: width / phi / 5,
+    height: width / PHI() / 5,
   },
 });
 
