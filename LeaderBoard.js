@@ -31,8 +31,8 @@ function LeaderBoard({ api, isTitleScreen }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    borderColor: "red",
-    borderWidth: 1,
+    borderColor: "purple",
+    borderWidth: 2,
     padding: 5,
     borderRadius: 8,
   },
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "bold",
     fontFamily: "Georgia",
+    // color: "navy",
   },
 });
 

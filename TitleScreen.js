@@ -7,7 +7,7 @@ const TitleScreen = ({ setIsTitleScreen, setIsNameSubmitted }) => {
       <View style={styles.marginBottom}>
         <Text style={styles.header}>The</Text>
         <Text style={styles.header}>Fibonacci</Text>
-        <Text style={styles.header}>Sequins!</Text>
+        <Text style={styles.header}>Sequins</Text>
       </View>
       <Pressable
         style={styles.button}
@@ -41,6 +41,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#2196F3",
     alignSelf: "center",
     marginTop: 34,
+    borderColor: "navy",
+    borderWidth: 1,
     // shadowColor: "rgba(255, 255, 255, 1)",
     // shadowOffset: { width: -1, height: 3 },
     // shadowRadius: 1,
@@ -49,6 +51,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 21,
     fontWeight: "bold",
+    textShadowColor: "navy",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 1,
   },
 });
 

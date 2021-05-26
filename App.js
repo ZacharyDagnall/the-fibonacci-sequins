@@ -6,7 +6,6 @@ import {
   TextInput,
   Pressable,
   View,
-  Alert,
   Linking,
   ImageBackground,
 } from "react-native";
@@ -17,6 +16,7 @@ import LeaderBoard from "./LeaderBoard";
 import { emptyBoard, newTile, isGameOver } from "./board";
 import { ordinal } from "./additionalMath";
 import TitleScreen from "./TitleScreen";
+import { isNameOkay } from "./inappropriate";
 
 export default function App() {
   const [isTitleScreen, setIsTitleScreen] = useState(true);
@@ -28,6 +28,8 @@ export default function App() {
   const [youSureQuitModalVisible, setYouSureQuitModalVisible] = useState(false);
   const [youSureNewModalVisible, setYouSureNewModalVisible] = useState(false);
   const [isNameSubmitted, setIsNameSubmitted] = useState(false);
+  const [inappropriateNameMessageOn, turnInappopriateNameMessageOn] =
+    useState(false);
   const api = "http://192.168.1.18:3001";
 
   useEffect(() => {
@@ -45,6 +47,18 @@ export default function App() {
       .catch((er) => console.log("STB error: ", er.message));
   }, [isTitleScreen]);
 
+  function submitNameForm(from) {
+    if (isNameOkay(name)) {
+      submitName();
+      if (from === "quit") {
+        setQuitModalVisible(false);
+        setIsTitleScreen(true);
+      }
+    } else {
+      turnInappopriateNameMessageOn(true);
+    }
+  }
+
   function submitName() {
     fetch(`${api}/scores`, {
       method: "POST",
@@ -54,7 +68,6 @@ export default function App() {
       },
       body: JSON.stringify({ name: name, score: score }),
     }).then(() => setIsNameSubmitted(true));
-    //if i add validations for appropriate names, will have to handle them here
   }
 
   function newGame() {
@@ -76,26 +89,25 @@ export default function App() {
 
   function scoreQualifies() {
     // return true;
-    // return score > 1;
     return score > stb.score;
   }
 
   function checkGameOver() {
-    if (isGameOver(board)) {
-      // if (score > 1) {
+    // if (isGameOver(board)) {
+    if (score > 10) {
       // if (true) {
       setGameOverModalVisible(true);
     }
   }
 
-  function doNothing() {}
+  // function doNothing() {}
 
   return (
     <View style={styles.container}>
       <ImageBackground
         style={styles.backgroundImage}
         source={collage}
-        blurRadius={isTitleScreen ? 0 : 8}
+        blurRadius={isTitleScreen ? 0 : 13}
       >
         {isTitleScreen && !quitModalVisible ? (
           <TitleScreen
@@ -125,22 +137,26 @@ export default function App() {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>
-                You scored high enough to join the leaderboard! Enter your name
-                to save your score.
+                You scored {score} points, which is high enough to join the
+                leaderboard! Enter your name to save your score.
               </Text>
               <TextInput
                 style={styles.input}
-                onChangeText={setName}
+                onChangeText={(e) => {
+                  setName(e);
+                  turnInappopriateNameMessageOn(false);
+                }}
                 value={name}
-                placeholder="enter name"
+                placeholder="enter name (limit 25 char)"
               />
+              {inappropriateNameMessageOn ? (
+                <Text style={styles.badNameText}>
+                  Please choose another name
+                </Text>
+              ) : null}
               <Pressable
                 style={styles.button}
-                onPress={() => {
-                  submitName();
-                  setQuitModalVisible(false);
-                  setIsTitleScreen(true);
-                }}
+                onPress={() => submitNameForm("quit")}
               >
                 <Text style={styles.textStyle}>Submit</Text>
               </Pressable>
@@ -167,22 +183,37 @@ export default function App() {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <Pressable
+                style={[styles.button, styles.Xbutton]}
+                onPress={() => setGameOverModalVisible(false)}
+              >
+                <Text style={[styles.textStyle, styles.XbuttonText]}>X</Text>
+              </Pressable>
               <Text style={[styles.modalText, styles.gameOver]}>
                 Game Over!
               </Text>
               {scoreQualifies() && !isNameSubmitted ? (
                 <View style={styles.nameContainer}>
                   <Text style={styles.modalText}>
-                    Great job! You scored high enough to join the leaderboard!
-                    Enter your name to save your score.
+                    Great job! You scored {score} points, which is high enough
+                    to join the leaderboard! Enter your name to save your score.
                   </Text>
                   <TextInput
                     style={styles.input}
                     onChangeText={setName}
                     value={name}
-                    placeholder="enter name"
+                    placeholder="enter name (limit 25 char)"
                   />
-                  <Pressable style={styles.button} onPress={submitName}>
+                  {inappropriateNameMessageOn ? (
+                    <Text style={styles.badNameText}>
+                      Please choose another name
+                    </Text>
+                  ) : null}
+
+                  <Pressable
+                    style={styles.button}
+                    onPress={() => submitNameForm("game over")}
+                  >
                     <Text style={styles.textStyle}>Submit</Text>
                   </Pressable>
                 </View>
@@ -244,7 +275,7 @@ export default function App() {
                   setYouSureQuitModalVisible(false);
                 }}
               >
-                <Text style={styles.textStyle}>Nah you right, i'mma stay</Text>
+                <Text style={styles.textStyle}>Nah you right, I'mma stay</Text>
               </Pressable>
             </View>
           </View>
@@ -279,7 +310,7 @@ export default function App() {
                   setYouSureNewModalVisible(false);
                 }}
               >
-                <Text style={styles.textStyle}>Changed my mind, i'll stay</Text>
+                <Text style={styles.textStyle}>Changed my mind, I'll stay</Text>
               </Pressable>
             </View>
           </View>
@@ -313,6 +344,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "lightblue",
+    marginBottom: 8,
   },
   centeredView: {
     flex: 1,
@@ -334,13 +366,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 5,
     elevation: 5,
+    borderColor: "lightblue",
+    borderWidth: 2,
   },
   button: {
     borderRadius: 8,
-    padding: 5,
+    padding: 8,
     elevation: 2,
     backgroundColor: "#2196F3",
-    margin: 5,
+    margin: 13,
   },
   nahButton: {
     backgroundColor: "red",
@@ -349,6 +383,15 @@ const styles = StyleSheet.create({
     margin: 5,
     width: 233,
     borderRadius: 8,
+  },
+  Xbutton: {
+    alignSelf: "flex-end",
+    padding: 5,
+    margin: 0,
+    backgroundColor: "purple",
+  },
+  XbuttonText: {
+    color: "white",
   },
   textStyle: {
     color: "white",
@@ -374,5 +417,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 21,
     backgroundColor: "lightgrey",
+  },
+  badNameText: {
+    fontSize: 13,
+    color: "red",
   },
 });

@@ -5,10 +5,6 @@
 
 ~ future ~
 
-maybe make an alert or modal to confirm when pressing quit or new game
-
-link to italian music to play while you play? opens a spotify playlist on your phone.
-
 print the fibonacci sequence somewhere like under game board for reference? not sure.
 
 golden rectangle game grid? (if it is playable in landscape-only then it will look better)

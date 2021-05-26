@@ -13,7 +13,7 @@ function HeaderComponent({ score, newGame, quitGame }) {
           <Text style={styles.newGameText}>New Game!</Text>
         </Pressable>
       </View>
-      <Text style={styles.header}>The Fibonacci Sequins!</Text>
+      <Text style={styles.header}>The Fibonacci Sequins</Text>
       <Text style={styles.score}>Your Score: {score}</Text>
     </View>
   );
@@ -34,17 +34,18 @@ const styles = StyleSheet.create({
   score: {
     fontSize: 21,
     textAlign: "center",
-    color: "blue",
+    color: "white",
     fontWeight: "bold",
     fontFamily: "Times New Roman",
-    textShadowColor: "rgba(255, 255, 255, 1)",
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 1,
+    textShadowColor: "black",
+    textShadowOffset: { width: -1, height: 2 },
+    textShadowRadius: 8,
+    // backgroundColor: "white",
   },
   newGameButton: {
     fontWeight: "bold",
     borderRadius: 5,
-    backgroundColor: "green",
+    backgroundColor: "orange",
     borderColor: "black",
     borderWidth: 2,
     elevation: 3,
@@ -58,6 +59,9 @@ const styles = StyleSheet.create({
     color: "white",
     padding: 3,
     fontWeight: "bold",
+    textShadowColor: "black",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 1,
   },
   quitGameButton: {
     fontWeight: "bold",
@@ -76,6 +80,9 @@ const styles = StyleSheet.create({
     color: "white",
     padding: 3,
     fontWeight: "bold",
+    textShadowColor: "black",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 1,
   },
   buttonsContainer: {
     marginTop: 13,
