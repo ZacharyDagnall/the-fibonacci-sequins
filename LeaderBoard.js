@@ -31,7 +31,7 @@ function LeaderBoard({ api, isTitleScreen }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    borderColor: "purple",
+    borderColor: "#720e9e",
     borderWidth: 2,
     padding: 5,
     borderRadius: 8,

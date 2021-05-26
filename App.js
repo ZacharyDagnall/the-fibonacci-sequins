@@ -14,7 +14,6 @@ import Game from "./Game";
 import HeaderComponent from "./HeaderComponent";
 import LeaderBoard from "./LeaderBoard";
 import { emptyBoard, newTile, isGameOver } from "./board";
-import { ordinal } from "./additionalMath";
 import TitleScreen from "./TitleScreen";
 import { isNameOkay } from "./inappropriate";
 
@@ -30,6 +29,10 @@ export default function App() {
   const [isNameSubmitted, setIsNameSubmitted] = useState(false);
   const [inappropriateNameMessageOn, turnInappopriateNameMessageOn] =
     useState(false);
+  const [nahBTNpressed, setNahBTNpressed] = useState(false);
+  const [GOnewBTNPressed, setGOnewBTNpressed] = useState(false);
+  const [GOquitBTNPressed, setGOquitBTNpressed] = useState(false);
+  const [GOrateBTNPressed, setGOrateBTNpressed] = useState(false);
   const api = "http://192.168.1.18:3001";
 
   useEffect(() => {
@@ -219,27 +222,57 @@ export default function App() {
                 </View>
               ) : null}
               <Pressable
-                style={[styles.button, styles.gameOverButton]}
+                style={
+                  GOnewBTNPressed
+                    ? [
+                        styles.button,
+                        styles.gameOverButton,
+                        styles.gameOverButtonPressed,
+                      ]
+                    : [styles.button, styles.gameOverButton]
+                }
                 onPress={() => {
                   newGame();
                   setGameOverModalVisible(false);
                   setIsNameSubmitted(false);
                 }}
+                onPressIn={() => setGOnewBTNpressed(true)}
+                onPressOut={() => setGOnewBTNpressed(false)}
               >
                 <Text style={styles.textStyle}>New Game</Text>
               </Pressable>
               <Pressable
-                style={[styles.button, styles.gameOverButton]}
+                style={
+                  GOquitBTNPressed
+                    ? [
+                        styles.button,
+                        styles.gameOverButton,
+                        styles.gameOverButtonPressed,
+                      ]
+                    : [styles.button, styles.gameOverButton]
+                }
                 onPress={() => {
                   setIsTitleScreen(true);
                   setGameOverModalVisible(false);
                 }}
+                onPressIn={() => setGOquitBTNpressed(true)}
+                onPressOut={() => setGOquitBTNpressed(false)}
               >
                 <Text style={styles.textStyle}>Quit</Text>
               </Pressable>
               <Pressable
-                style={[styles.button, styles.gameOverButton]}
+                style={
+                  GOrateBTNPressed
+                    ? [
+                        styles.button,
+                        styles.gameOverButton,
+                        styles.gameOverButtonPressed,
+                      ]
+                    : [styles.button, styles.gameOverButton]
+                }
                 onPress={() => Linking.openURL("https://zacharydagnall.dev/")}
+                onPressIn={() => setGOrateBTNpressed(true)}
+                onPressOut={() => setGOrateBTNpressed(false)}
               >
                 <Text style={styles.textStyle}>Rate in App Store</Text>
               </Pressable>
@@ -270,10 +303,17 @@ export default function App() {
                 <Text style={styles.textStyle}>Yes, we out</Text>
               </Pressable>
               <Pressable
-                style={[styles.button, styles.nahButton]}
+                style={
+                  nahBTNpressed
+                    ? [styles.button, styles.nahButton, styles.nahButtonPressed]
+                    : [styles.button, styles.nahButton]
+                }
                 onPress={() => {
                   setYouSureQuitModalVisible(false);
+                  setNahBTNpressed(false);
                 }}
+                onPressIn={() => setNahBTNpressed(true)}
+                onPressOut={() => setNahBTNpressed(false)}
               >
                 <Text style={styles.textStyle}>Nah you right, I'mma stay</Text>
               </Pressable>
@@ -305,10 +345,17 @@ export default function App() {
                 <Text style={styles.textStyle}>Yes, time for a change</Text>
               </Pressable>
               <Pressable
-                style={[styles.button, styles.nahButton]}
+                style={
+                  nahBTNpressed
+                    ? [styles.button, styles.nahButton, styles.nahButtonPressed]
+                    : [styles.button, styles.nahButton]
+                }
                 onPress={() => {
                   setYouSureNewModalVisible(false);
+                  setNahBTNpressed(false);
                 }}
+                onPressIn={() => setNahBTNpressed(true)}
+                onPressOut={() => setNahBTNpressed(false)}
               >
                 <Text style={styles.textStyle}>Changed my mind, I'll stay</Text>
               </Pressable>
@@ -379,16 +426,25 @@ const styles = StyleSheet.create({
   nahButton: {
     backgroundColor: "red",
   },
+  nahButtonPressed: {
+    marginRight: 8,
+    backgroundColor: "magenta",
+  },
   gameOverButton: {
     margin: 5,
     width: 233,
     borderRadius: 8,
+    padding: 13,
+  },
+  gameOverButtonPressed: {
+    backgroundColor: "magenta",
+    borderRadius: 21,
   },
   Xbutton: {
     alignSelf: "flex-end",
     padding: 5,
     margin: 0,
-    backgroundColor: "purple",
+    backgroundColor: "#720e9e",
   },
   XbuttonText: {
     color: "white",
@@ -397,6 +453,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
+    textShadowColor: "black",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 1,
   },
   modalText: {
     marginBottom: 13,
@@ -416,7 +475,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     textAlign: "center",
     fontSize: 21,
-    backgroundColor: "lightgrey",
+    backgroundColor: "#E8E8E8",
   },
   badNameText: {
     fontSize: 13,

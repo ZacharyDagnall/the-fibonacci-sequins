@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, StyleSheet, View, Pressable } from "react-native";
 
 const TitleScreen = ({ setIsTitleScreen, setIsNameSubmitted }) => {
+  const [playBTNpressed, setPlayBTNpressed] = useState(false);
   return (
     <View>
       <View style={styles.marginBottom}>
@@ -10,11 +11,15 @@ const TitleScreen = ({ setIsTitleScreen, setIsNameSubmitted }) => {
         <Text style={styles.header}>Sequins</Text>
       </View>
       <Pressable
-        style={styles.button}
+        style={
+          playBTNpressed ? [styles.button, styles.buttonPressed] : styles.button
+        }
         onPress={() => {
           setIsTitleScreen(false);
           setIsNameSubmitted(false);
         }}
+        onPressIn={() => setPlayBTNpressed(true)}
+        onPressOut={() => setPlayBTNpressed(false)}
       >
         <Text style={styles.buttonText}>Play Game!</Text>
       </Pressable>
@@ -30,22 +35,23 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
     fontFamily: "Copperplate",
-    textShadowColor: "rgba(255, 255, 255, 1)",
+    textShadowColor: "rgba(233, 233, 233, 1)",
     textShadowOffset: { width: -1, height: 3 },
     textShadowRadius: 1,
   },
   button: {
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: 21,
+    padding: 13,
     elevation: 2,
     backgroundColor: "#2196F3",
     alignSelf: "center",
     marginTop: 34,
     borderColor: "navy",
     borderWidth: 1,
-    // shadowColor: "rgba(255, 255, 255, 1)",
-    // shadowOffset: { width: -1, height: 3 },
-    // shadowRadius: 1,
+  },
+  buttonPressed: {
+    backgroundColor: "magenta",
+    marginLeft: 8,
   },
   buttonText: {
     color: "white",

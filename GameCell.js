@@ -22,14 +22,20 @@ import pink from "./pink.png";
 import purple from "./purple.png";
 import red from "./red.png";
 import yellow from "./yellow.png";
+import fibby from "./fibonacci.png";
+import euclid from "./euclid.png";
+import ada from "./lovelace.png";
 
 const sequins = {
   0: black,
   1: red,
   2: blue,
+  // 2: euclid,
   3: lightGreen,
   5: lavendar,
+  // 5: ada,
   8: lightOrange,
+  // 8: fibby,
   13: darkBlue,
   21: yellow,
   34: darkGreen,
@@ -45,13 +51,13 @@ const sequins = {
   4181: limeGreen,
   6765: pink,
   10946: darkOrange,
-  17711: lightGray,
+  17711: darkBlue,
   28657: red,
   46368: blue,
   75025: lightGreen,
   121393: lavendar,
   196418: lightOrange,
-  317811: darkBlue,
+  317811: lightGray,
 };
 
 function GameCell({ number }) {
@@ -66,7 +72,9 @@ function GameCell({ number }) {
             style={
               number < 144
                 ? styles.textStyle
-                : [styles.textStyle, styles.tripsDigitText]
+                : number < 10946
+                ? [styles.textStyle, styles.tripsDigitText]
+                : [styles.textStyle, styles.pentDigitText]
             }
           >
             {number > 0 ? number : ""}
@@ -81,7 +89,7 @@ function GameCell({ number }) {
 
 const styles = StyleSheet.create({
   cellStyle: {
-    backgroundColor: "rgba(255, 255, 255, 0.35)",
+    backgroundColor: "rgba(233, 233, 233, 0.35)",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -102,10 +110,13 @@ const styles = StyleSheet.create({
     color: "white",
     textShadowColor: "rgba(0, 0, 0, 1)",
     textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 3,
+    textShadowRadius: 2,
   },
   tripsDigitText: {
     fontSize: 21,
+  },
+  pentDigitText: {
+    fontSize: 13,
   },
 });
 

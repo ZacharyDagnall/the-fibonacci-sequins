@@ -1,15 +1,35 @@
 import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, Pressable } from "react-native";
 
 function HeaderComponent({ score, newGame, quitGame }) {
+  const [quitBTNpressed, setQuitBTNpress] = useState(false);
+  const [newGameBTNpressed, setNewGameBTNpress] = useState(false);
   return (
     <View>
       <View style={styles.buttonsContainer}>
-        <Pressable style={styles.quitGameButton} onPress={quitGame}>
+        <Pressable
+          style={
+            quitBTNpressed
+              ? [styles.quitGameButton, styles.quitGameButtonPressed]
+              : styles.quitGameButton
+          }
+          onPress={quitGame}
+          onPressIn={() => setQuitBTNpress(true)}
+          onPressOut={() => setQuitBTNpress(false)}
+        >
           <Text style={styles.quitGameText}>Quit Game!</Text>
         </Pressable>
-        <Pressable style={styles.newGameButton} onPress={newGame}>
+        <Pressable
+          style={
+            newGameBTNpressed
+              ? [styles.newGameButton, styles.newGameButtonPressed]
+              : styles.newGameButton
+          }
+          onPress={newGame}
+          onPressIn={() => setNewGameBTNpress(true)}
+          onPressOut={() => setNewGameBTNpress(false)}
+        >
           <Text style={styles.newGameText}>New Game!</Text>
         </Pressable>
       </View>
@@ -27,8 +47,8 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
     fontFamily: "Times New Roman",
-    textShadowColor: "rgba(255, 255, 255, 1)",
-    textShadowOffset: { width: -1, height: 1 },
+    textShadowColor: "rgba(233, 233, 233, 1)",
+    textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 1,
   },
   score: {
@@ -38,8 +58,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "Times New Roman",
     textShadowColor: "black",
-    textShadowOffset: { width: -1, height: 2 },
-    textShadowRadius: 8,
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
     // backgroundColor: "white",
   },
   newGameButton: {
@@ -52,6 +72,10 @@ const styles = StyleSheet.create({
     width: 89,
     marginTop: 13,
     marginRight: 13,
+  },
+  newGameButtonPressed: {
+    marginRight: 21,
+    backgroundColor: "#FFD700",
   },
   newGameText: {
     fontSize: 13,
@@ -73,6 +97,10 @@ const styles = StyleSheet.create({
     width: 89,
     marginTop: 13,
     marginLeft: 13,
+  },
+  quitGameButtonPressed: {
+    marginLeft: 21,
+    backgroundColor: "magenta",
   },
   quitGameText: {
     fontSize: 13,

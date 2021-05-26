@@ -50,10 +50,12 @@ export function newTile(boardObj) {
 }
 
 function canCombine(a, b) {
-  let m = fibonacciSequence.indexOf(a);
-  let n = fibonacciSequence.indexOf(b);
+  //i think i can change this to be if FS.indexOf(a+b)>=0. If the sum is in the sequence, they must be adjacent.
+  return fibonacciSequence.indexOf(a + b) >= 0;
+  // let m = fibonacciSequence.indexOf(a);
+  // let n = fibonacciSequence.indexOf(b);
 
-  return (Math.abs(m - n) == 1 || (a == 1 && b == 1)) && a !== 0 && b !== 0;
+  // return (Math.abs(m - n) == 1 || (a == 1 && b == 1)) && a !== 0 && b !== 0;
 }
 
 //slides all tiles to the left
