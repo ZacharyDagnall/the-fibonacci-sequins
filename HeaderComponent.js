@@ -3,21 +3,6 @@ import React, { useEffect } from "react";
 import { Text, StyleSheet, View, Pressable } from "react-native";
 
 function HeaderComponent({ score, newGame, quitGame }) {
-  // const api = "http://localhost:3001";
-
-  // useEffect(() => {
-  //   fetch(`${api}/scores`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //     body: JSON.stringify({ name: "Fibonacci Himself", score: 64516 }),
-  //   })
-  //     .then((r) => r.json())
-  //     .then((data) => console.log("what is coming back from post", data));
-  // }, [score]);
-
   return (
     <View>
       <View style={styles.buttonsContainer}>
@@ -42,6 +27,9 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
     fontFamily: "Times New Roman",
+    textShadowColor: "rgba(255, 255, 255, 1)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 1,
   },
   score: {
     fontSize: 21,
@@ -49,6 +37,9 @@ const styles = StyleSheet.create({
     color: "blue",
     fontWeight: "bold",
     fontFamily: "Times New Roman",
+    textShadowColor: "rgba(255, 255, 255, 1)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 1,
   },
   newGameButton: {
     fontWeight: "bold",

@@ -8,7 +8,9 @@ import {
   View,
   Alert,
   Linking,
+  ImageBackground,
 } from "react-native";
+import collage from "./collage.png";
 import Game from "./Game";
 import HeaderComponent from "./HeaderComponent";
 import LeaderBoard from "./LeaderBoard";
@@ -23,6 +25,8 @@ export default function App() {
   const [name, setName] = useState("");
   const [quitModalVisible, setQuitModalVisible] = useState(false);
   const [gameOverModalVisible, setGameOverModalVisible] = useState(false);
+  const [youSureQuitModalVisible, setYouSureQuitModalVisible] = useState(false);
+  const [youSureNewModalVisible, setYouSureNewModalVisible] = useState(false);
   const [isNameSubmitted, setIsNameSubmitted] = useState(false);
   const api = "http://192.168.1.18:3001";
 
@@ -36,7 +40,6 @@ export default function App() {
     fetch(`${api}/scores/scoreToBeat`)
       .then((r) => r.json())
       .then((data) => {
-        console.log("score to beat", data);
         setSTB(data);
       })
       .catch((er) => console.log("STB error: ", er.message));
@@ -51,6 +54,7 @@ export default function App() {
       },
       body: JSON.stringify({ name: name, score: score }),
     }).then(() => setIsNameSubmitted(true));
+    //if i add validations for appropriate names, will have to handle them here
   }
 
   function newGame() {
@@ -67,135 +71,221 @@ export default function App() {
   }
 
   useEffect(() => {
-    setBoard(newTile(emptyBoard()));
-    setScore(0);
+    newGame();
   }, [isTitleScreen]);
 
   function scoreQualifies() {
     // return true;
-    return score > 1;
+    // return score > 1;
     return score > stb.score;
   }
 
   function checkGameOver() {
-    // if (isGameOver(board)) {
-    if (score > 1) {
+    if (isGameOver(board)) {
+      // if (score > 1) {
       // if (true) {
       setGameOverModalVisible(true);
     }
   }
 
-  // function doNothing() {}
+  function doNothing() {}
 
   return (
     <View style={styles.container}>
-      {isTitleScreen && !quitModalVisible ? (
-        <TitleScreen
-          setIsTitleScreen={setIsTitleScreen}
-          setIsNameSubmitted={setIsNameSubmitted}
-        />
-      ) : (
-        <>
-          <HeaderComponent
-            score={score}
-            newGame={newGame}
-            quitGame={quitGame}
+      <ImageBackground
+        style={styles.backgroundImage}
+        source={collage}
+        blurRadius={isTitleScreen ? 0 : 8}
+      >
+        {isTitleScreen && !quitModalVisible ? (
+          <TitleScreen
+            setIsTitleScreen={setIsTitleScreen}
+            setIsNameSubmitted={setIsNameSubmitted}
           />
-          <Game setBoard={setBoard} board={board} />
-          <LeaderBoard api={api} isTitleScreen={isTitleScreen} />
-        </>
-      )}
-      {/* Quit Game Modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={quitModalVisible}
-        onRequestClose={() => {
-          setQuitModalVisible(!quitModalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>
-              You scored high enough to join the leaderboard! Enter your name to
-              save your score.
-            </Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setName}
-              value={name}
-              placeholder="enter name"
+        ) : (
+          <>
+            <HeaderComponent
+              score={score}
+              newGame={() => setYouSureNewModalVisible(true)}
+              quitGame={() => setYouSureQuitModalVisible(true)}
             />
-            <Pressable
-              style={styles.button}
-              onPress={() => {
-                submitName();
-                setQuitModalVisible(false);
-                setIsTitleScreen(true);
-              }}
-            >
-              <Text style={styles.textStyle}>Submit</Text>
-            </Pressable>
+            <Game setBoard={setBoard} board={board} />
+            <LeaderBoard api={api} isTitleScreen={isTitleScreen} />
+          </>
+        )}
+        {/* Quit Game Modal */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={quitModalVisible}
+          onRequestClose={() => {
+            setQuitModalVisible(!quitModalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>
+                You scored high enough to join the leaderboard! Enter your name
+                to save your score.
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setName}
+                value={name}
+                placeholder="enter name"
+              />
+              <Pressable
+                style={styles.button}
+                onPress={() => {
+                  submitName();
+                  setQuitModalVisible(false);
+                  setIsTitleScreen(true);
+                }}
+              >
+                <Text style={styles.textStyle}>Submit</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.nahButton]}
+                onPress={() => {
+                  setQuitModalVisible(false);
+                  setIsTitleScreen(true);
+                }}
+              >
+                <Text style={styles.textStyle}>Nah We Good</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </Modal>
-      {/* Game Over Modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={gameOverModalVisible}
-        onRequestClose={() => {
-          setGameOverModalVisible(false);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={[styles.modalText, styles.gameOver]}>Game Over!</Text>
-            {scoreQualifies() && !isNameSubmitted ? (
-              <View style={styles.nameContainer}>
-                <Text style={styles.modalText}>
-                  Great job! You scored high enough to join the leaderboard!
-                  Enter your name to save your score.
-                </Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={setName}
-                  value={name}
-                  placeholder="enter name"
-                />
-                <Pressable style={styles.button} onPress={submitName}>
-                  <Text style={styles.textStyle}>Submit</Text>
-                </Pressable>
-              </View>
-            ) : null}
-            <Pressable
-              style={[styles.button, styles.gameOverButton]}
-              onPress={() => {
-                newGame();
-                setGameOverModalVisible(false);
-                setIsNameSubmitted(false);
-              }}
-            >
-              <Text style={styles.textStyle}>New Game</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.gameOverButton]}
-              onPress={() => {
-                setIsTitleScreen(true);
-                setGameOverModalVisible(false);
-              }}
-            >
-              <Text style={styles.textStyle}>Quit</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.gameOverButton]}
-              onPress={() => Linking.openURL("https://zacharydagnall.dev/")}
-            >
-              <Text style={styles.textStyle}>Rate in App Store</Text>
-            </Pressable>
+        </Modal>
+        {/* Game Over Modal */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={gameOverModalVisible}
+          onRequestClose={() => {
+            setGameOverModalVisible(false);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={[styles.modalText, styles.gameOver]}>
+                Game Over!
+              </Text>
+              {scoreQualifies() && !isNameSubmitted ? (
+                <View style={styles.nameContainer}>
+                  <Text style={styles.modalText}>
+                    Great job! You scored high enough to join the leaderboard!
+                    Enter your name to save your score.
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={setName}
+                    value={name}
+                    placeholder="enter name"
+                  />
+                  <Pressable style={styles.button} onPress={submitName}>
+                    <Text style={styles.textStyle}>Submit</Text>
+                  </Pressable>
+                </View>
+              ) : null}
+              <Pressable
+                style={[styles.button, styles.gameOverButton]}
+                onPress={() => {
+                  newGame();
+                  setGameOverModalVisible(false);
+                  setIsNameSubmitted(false);
+                }}
+              >
+                <Text style={styles.textStyle}>New Game</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.gameOverButton]}
+                onPress={() => {
+                  setIsTitleScreen(true);
+                  setGameOverModalVisible(false);
+                }}
+              >
+                <Text style={styles.textStyle}>Quit</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.gameOverButton]}
+                onPress={() => Linking.openURL("https://zacharydagnall.dev/")}
+              >
+                <Text style={styles.textStyle}>Rate in App Store</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+        {/* Quit "You Sure?" Modal */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={youSureQuitModalVisible}
+          onRequestClose={() => {
+            setYouSureQuitModalVisible(false);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>
+                Are you sure you want to quit? You won't be able to return.
+              </Text>
+              <Pressable
+                style={styles.button}
+                onPress={() => {
+                  setYouSureQuitModalVisible(false);
+                  quitGame();
+                }}
+              >
+                <Text style={styles.textStyle}>Yes, we out</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.nahButton]}
+                onPress={() => {
+                  setYouSureQuitModalVisible(false);
+                }}
+              >
+                <Text style={styles.textStyle}>Nah you right, i'mma stay</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+        {/* New Game "You Sure?" Modal */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={youSureNewModalVisible}
+          onRequestClose={() => {
+            setYouSureNewModalVisible(false);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>
+                Are you sure you want to start a new game? You won't be able to
+                return.
+              </Text>
+              <Pressable
+                style={styles.button}
+                onPress={() => {
+                  setYouSureNewModalVisible(false);
+                  newGame();
+                }}
+              >
+                <Text style={styles.textStyle}>Yes, time for a change</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.nahButton]}
+                onPress={() => {
+                  setYouSureNewModalVisible(false);
+                }}
+              >
+                <Text style={styles.textStyle}>Changed my mind, i'll stay</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+        <></>
+      </ImageBackground>
     </View>
   );
 }
@@ -206,6 +296,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#B9D9EB",
     alignItems: "center",
     justifyContent: "center",
+  },
+  backgroundImage: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    opacity: 1,
   },
   nameContainer: {
     borderWidth: 1,
@@ -238,10 +336,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   button: {
-    borderRadius: 21,
+    borderRadius: 8,
     padding: 5,
     elevation: 2,
     backgroundColor: "#2196F3",
+    margin: 5,
+  },
+  nahButton: {
+    backgroundColor: "red",
   },
   gameOverButton: {
     margin: 5,

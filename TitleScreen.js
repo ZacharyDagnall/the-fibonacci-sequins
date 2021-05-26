@@ -23,9 +23,6 @@ const TitleScreen = ({ setIsTitleScreen, setIsNameSubmitted }) => {
 };
 
 const styles = StyleSheet.create({
-  //   headerContainer: {
-  //     marginBottom: 34,
-  //   },
   header: {
     margin: 0,
     fontSize: 55,
@@ -33,6 +30,9 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
     fontFamily: "Copperplate",
+    textShadowColor: "rgba(255, 255, 255, 1)",
+    textShadowOffset: { width: -1, height: 3 },
+    textShadowRadius: 1,
   },
   button: {
     borderRadius: 20,
@@ -41,10 +41,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#2196F3",
     alignSelf: "center",
     marginTop: 34,
+    // shadowColor: "rgba(255, 255, 255, 1)",
+    // shadowOffset: { width: -1, height: 3 },
+    // shadowRadius: 1,
   },
   buttonText: {
     color: "white",
     fontSize: 21,
+    fontWeight: "bold",
   },
 });
 
