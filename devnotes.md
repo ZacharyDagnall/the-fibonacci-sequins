@@ -57,6 +57,4 @@ if i make a hard mode i need to change a decent amount of stuff in the backend i
 .
 .
 
-buttons i aint do yet: submit button and X button in gameover modal, yes buttons in you-sure modals, and anything in quit-name modal
-
-am i happy with the border radius changing on Game OVer buttons? should i incorporate that on some of the other buttons too? join us next time on another riveting episode OF ....
+am i happy with the border radius changing on Game Over buttons? should i incorporate that on some of the other buttons too?

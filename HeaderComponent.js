@@ -6,7 +6,9 @@ function HeaderComponent({ score, newGame, quitGame }) {
   const [quitBTNpressed, setQuitBTNpress] = useState(false);
   const [newGameBTNpressed, setNewGameBTNpress] = useState(false);
   return (
-    <View>
+    <View
+    // style={styles.headerContainer}
+    >
       <View style={styles.buttonsContainer}>
         <Pressable
           style={
@@ -40,6 +42,9 @@ function HeaderComponent({ score, newGame, quitGame }) {
 }
 
 const styles = StyleSheet.create({
+  // headerContainer: {
+  //   marginTop: 8,
+  // },
   header: {
     padding: 5,
     fontSize: 34,
