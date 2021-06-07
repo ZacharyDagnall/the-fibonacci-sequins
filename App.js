@@ -39,7 +39,6 @@ export default function App() {
   const [GOrateBTNPressed, setGOrateBTNpressed] = useState(false);
   const [xBTNpressed, setxBTNpressed] = useState(false);
   const [submitBTNpressed, setSubmitBTNpressed] = useState(false);
-  // const api = "http://192.168.1.5:3001";
   const api = "https://fibonacci-sequins-sbackend.herokuapp.com";
 
   useEffect(() => {
