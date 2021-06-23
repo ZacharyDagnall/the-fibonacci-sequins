@@ -21,6 +21,7 @@ const height = Dimensions.get("window").height;
 
 export default function App() {
   const [isTitleScreen, setIsTitleScreen] = useState(true);
+  const [isHardMode, setIsHardMode] = useState(false);
   const [board, setBoard] = useState(newTile(emptyBoard()));
   const [score, setScore] = useState(0);
   const [name, setName] = useState("");
@@ -40,6 +41,10 @@ export default function App() {
   const [xBTNpressed, setxBTNpressed] = useState(false);
   const [submitBTNpressed, setSubmitBTNpressed] = useState(false);
   const api = "https://fibonacci-sequins-sbackend.herokuapp.com";
+
+  useEffect(() => {
+    setBoard(newTile(emptyBoard(isHardMode)));
+  }, [isHardMode]);
 
   useEffect(() => {
     setScore(board.score);
@@ -121,6 +126,7 @@ export default function App() {
           <TitleScreen
             setIsTitleScreen={setIsTitleScreen}
             setIsNameSubmitted={setIsNameSubmitted}
+            setIsHardMode={setIsHardMode}
           />
         ) : (
           <>

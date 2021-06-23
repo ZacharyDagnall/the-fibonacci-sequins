@@ -17,13 +17,41 @@ import { PHI } from "./additionalMath";
 const width = Dimensions.get("window").width - 21 - 21;
 
 function Game({ board, setBoard }) {
+  function left() {
+    if (hasBad(board)) {
+      setBoard(newTile(moveRight(board)));
+    } else {
+      setBoard(newTile(moveLeft(board)));
+    }
+  }
+  function right() {
+    if (hasBad(board)) {
+      setBoard(newTile(moveLeft(board)));
+    } else {
+      setBoard(newTile(moveRight(board)));
+    }
+  }
+  function up() {
+    if (hasBad(board)) {
+      setBoard(newTile(moveDown(board)));
+    } else {
+      setBoard(newTile(moveUp(board)));
+    }
+  }
+  function down() {
+    if (hasBad(board)) {
+      setBoard(newTile(moveUp(board)));
+    } else {
+      setBoard(newTile(moveDown(board)));
+    }
+  }
   return (
     <GestureRecognizer
       style={styles.screenStyle}
-      onSwipeLeft={() => setBoard(newTile(moveLeft(board)))}
-      onSwipeRight={() => setBoard(newTile(moveRight(board)))}
-      onSwipeUp={() => setBoard(newTile(moveUp(board)))}
-      onSwipeDown={() => setBoard(newTile(moveDown(board)))}
+      onSwipeLeft={left}
+      onSwipeRight={right}
+      onSwipeUp={up}
+      onSwipeDown={down}
     >
       <View style={styles.board}>
         {board.board.map((row, i) => (

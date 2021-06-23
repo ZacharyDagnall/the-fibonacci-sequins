@@ -5,7 +5,7 @@ const fibonacciSequence = [
   6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811,
 ];
 
-export function emptyBoard() {
+export function emptyBoard(hardMode = false) {
   return {
     board: [
       [0, 0, 0, 0, 0],
@@ -15,6 +15,7 @@ export function emptyBoard() {
       [0, 0, 0, 0, 0],
     ],
     score: 0,
+    hardMode: hardMode,
   };
 }
 
@@ -57,7 +58,7 @@ export function newTile(boardObj) {
   }
 
   boardObj.board[row][col] =
-    Math.random() > 0.08 // change this for the probability of getting a "bad number"; currently set at 8%. Rare but costly!
+    !boardObj.hardMode || Math.random() > 0.3 // change the number for the probability of getting a "bad number" in hard mode; currently set at 8%. Rare but costly!
       ? newNums[Math.floor(Math.random() * newNums.length)]
       : badNums[Math.floor(Math.random() * badNums.length)];
   return boardObj;
@@ -68,16 +69,16 @@ function canCombine(a, b) {
   if (a > 0 && b > 0) {
     return fibonacciSequence.indexOf(a + b) >= 0; // they are adjacent fib nums
   } else if (a * b > 0) {
-    return true;
-    //they must both be neg
+    //they are both neg
+    return true; //right now any two neg numbers will combine. Scary!
+
     // return fibonacciSequence.indexOf(-a - b) >= 0; // they are adjacent negative fib nums
-  } else if (a + b === 0) {
-    // they are opposites -> delete! (come here to update if i want to delete Bads on >= instead of just ==)
-    return true;
   } else {
-    return false;
+    // they are opposites -> delete! (come here to update if i want to delete Bads on >= instead of just ==)
+    return a + b === 0;
   }
 
+  // // the old way:
   // let m = fibonacciSequence.indexOf(a);
   // let n = fibonacciSequence.indexOf(b);
 
