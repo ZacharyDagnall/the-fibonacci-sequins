@@ -4,7 +4,14 @@ import GestureRecognizer, {
   swipeDirections,
 } from "react-native-swipe-gestures";
 import GameCell from "./GameCell";
-import { newTile, moveLeft, moveRight, moveUp, moveDown } from "./board";
+import {
+  newTile,
+  moveLeft,
+  moveRight,
+  moveUp,
+  moveDown,
+  hasBad,
+} from "./board";
 import { PHI } from "./additionalMath";
 
 const width = Dimensions.get("window").width - 21 - 21;

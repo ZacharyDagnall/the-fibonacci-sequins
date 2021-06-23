@@ -63,25 +63,26 @@ const sequins = {
 function GameCell({ number }) {
   return (
     <View style={[styles.cellStyle]}>
-      {number > 0 ? (
+      {number !== 0 ? (
         <ImageBackground
           style={styles.backgroundImage}
-          source={sequins[number] || red}
+          source={sequins[number] || black}
         >
           <Text
-            style={
-              number < 144
+            style={[
+              number < 144 && number > -100
                 ? styles.textStyle
-                : number < 10946
+                : number < 10946 && number > -1000
                 ? [styles.textStyle, styles.tripsDigitText]
-                : [styles.textStyle, styles.pentDigitText]
-            }
+                : [styles.textStyle, styles.pentDigitText],
+              number < 0 ? styles.badNumText : null,
+            ]}
           >
-            {number > 0 ? number : ""}
+            {number !== 0 ? number : ""}
           </Text>
         </ImageBackground>
       ) : (
-        <Text style={styles.textStyle}>{number > 0 ? number : ""}</Text>
+        <Text style={styles.textStyle}>{number !== 0 ? number : ""}</Text>
       )}
     </View>
   );
@@ -111,6 +112,12 @@ const styles = StyleSheet.create({
     textShadowColor: "rgba(0, 0, 0, 1)",
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 2,
+  },
+  badNumText: {
+    color: "black",
+    textShadowColor: "red",
+    textShadowOffset: { width: 2, height: 1 },
+    textShadowRadius: 0,
   },
   tripsDigitText: {
     fontSize: 21,

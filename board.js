@@ -1,4 +1,5 @@
 const newNums = [1, 1, 2];
+const badNums = [-8, -13, -13, -21, -21, -21, -55, -55, -89];
 const fibonacciSequence = [
   1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181,
   6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811,
@@ -28,6 +29,17 @@ function isFull(boardObj) {
   return true;
 }
 
+export function hasBad(boardObj) {
+  for (let i = 0; i < boardObj.board.length; i++) {
+    for (let j = 0; j < boardObj.board[i].length; j++) {
+      if (boardObj.board[i][j] < 0) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function randomCoordinate() {
   const row = Math.floor(Math.random() * 5);
   const col = Math.floor(Math.random() * 5);
@@ -45,13 +57,27 @@ export function newTile(boardObj) {
   }
 
   boardObj.board[row][col] =
-    newNums[Math.floor(Math.random() * newNums.length)];
+    Math.random() > 0.08 // change this for the probability of getting a "bad number"; currently set at 8%. Rare but costly!
+      ? newNums[Math.floor(Math.random() * newNums.length)]
+      : badNums[Math.floor(Math.random() * badNums.length)];
   return boardObj;
 }
 
 function canCombine(a, b) {
   //i think i can change this to be if FS.indexOf(a+b)>=0. If the sum is in the sequence, they must be adjacent.
-  return fibonacciSequence.indexOf(a + b) >= 0;
+  if (a > 0 && b > 0) {
+    return fibonacciSequence.indexOf(a + b) >= 0; // they are adjacent fib nums
+  } else if (a * b > 0) {
+    return true;
+    //they must both be neg
+    // return fibonacciSequence.indexOf(-a - b) >= 0; // they are adjacent negative fib nums
+  } else if (a + b === 0) {
+    // they are opposites -> delete! (come here to update if i want to delete Bads on >= instead of just ==)
+    return true;
+  } else {
+    return false;
+  }
+
   // let m = fibonacciSequence.indexOf(a);
   // let n = fibonacciSequence.indexOf(b);
 
@@ -81,7 +107,9 @@ function smushLeft(boardObj) {
       if (canCombine(boardObj.board[i][j], boardObj.board[i][j + 1])) {
         let newVal = boardObj.board[i][j] + boardObj.board[i][j + 1];
         boardObj.board[i][j] = newVal;
-        boardObj.score += newVal;
+        if (newVal > 0) {
+          boardObj.score += newVal;
+        }
         boardObj.board[i][j + 1] = 0;
       }
     }
@@ -94,7 +122,7 @@ export function moveLeft(boardObj) {
   return slideLeft(smushLeft(slideLeft(boardObj)));
 }
 
-//using these functions to recycle moveLeft will probably prevent us from doing animations... NG. Return to fix
+//using these functions to recycle moveLeft will probably prevent us from doing animations... NG. Return to fix, if animation wanted.
 export function moveRight(boardObj) {
   return flip(moveLeft(flip(boardObj)));
 }
